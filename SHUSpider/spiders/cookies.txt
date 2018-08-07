@@ -1,6 +1,0 @@
-#LWP-Cookies-2.0
-Set-Cookie3: ASP.NET_SessionId=1gef1m0apnu15rnxcb0n4cfd; path="/"; domain="www.sz.shu.edu.cn"; path_spec; discard; HttpOnly=None; version=0
-Set-Cookie3: Hairun.Shu.XG.Student.WebSite_FORMS_AUTH=4E45FD9B752B7003932484E906CEFAC56F4ECCD852A7939AE47D124E3CAF657E773061573FC2180B93A0232B5C025E316769A3E0F43326D937C53EAA9C5348FEFAE22885FCC8D54C2C8EADB12F43752ACEE5C7C6515B7FBABF7668FEB03D0993; path="/"; domain="www.sz.shu.edu.cn"; path_spec; discard; HttpOnly=None; version=0
-Set-Cookie3: Hairun_LoginKey_shuzhi="tNVXRH7FCaeOK9roMkFKK0dZP91LreURm/PGdmLo6qu0hvapL/gLvdfFFeELo1jDL5mvys6jBdv4aWnnOAUtK8aAtj9fNtLIiSY3cmlufdTApQ68+BW1vsClDrz4FbW+wKUOvPgVtb5WwkWlzCifJcG34lqh1y6aVlgdNkUqhB4IXg17X/lHTlT9JxQJNLaRlPOJQ2RoK1HG/1syPpGb7bsrbRzJO7hvedN6/grJmrDIPEttRumfnqOyUHO/CX8TbH/7GKkTj8+lmDiKxNQI7QbC70KIzktKVba+fLidcmGD9P/1ghY5BnN7EVT1RX11WPJ/T08/IYR13VEEnQ7Mk7pI57FMDCTZiBMSwc/eAECx0GWofKzEwhgxjykTAHZkMaBFjNpuTFvVBYiDzI2EeyKXhMFc51QB5mKqwIxQt/7NKBVqbpwN/aliCGL6FKiXUofF9z0UgGci0haOMAGctxq+O3jtC36zVP92YrsAw3Awnspri07RweMKj46YlQug"; path="/"; domain="www.sz.shu.edu.cn"; path_spec; discard; version=0
-
-

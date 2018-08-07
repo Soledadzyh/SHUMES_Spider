@@ -9,7 +9,7 @@ from SHUSpider.items import NewsItemLoader, NewsItem
 class EnrolnewsSpider(scrapy.Spider):
     name = 'enrolnews'
     allowed_domains = ['bkzsw.shu.edu.cn']
-    start_urls = ['http://bkzsw.shu.edu.cn/zsxx/gzdt.htm']
+    start_urls = ['http://bkzsw.shu.edu.cn/zsxx/tzgg.htm']
 
 
     def parse(self, response):
@@ -49,7 +49,7 @@ class EnrolnewsSpider(scrapy.Spider):
         # 图片地址
         item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
-        item_loader.add_value("tag", "工作动态")
+        item_loader.add_value("tag", "通知公告")
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["本科招生网"])
         # 内容#vsb_content_2
