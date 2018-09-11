@@ -5,6 +5,8 @@ import scrapy
 from scrapy import Request
 
 from SHUSpider.items import NewsItemLoader, NewsItem
+from SHUSpider.utils.com import get_md5
+
 
 class EnrolnewsSpider(scrapy.Spider):
     name = 'enrolnews'
@@ -42,7 +44,7 @@ class EnrolnewsSpider(scrapy.Spider):
         item_loader.add_css("title", "#dnn_ctr63596_ArtDetail_lblTitle::text")
         # 文章地址
         item_loader.add_value("url", response.url)
-        # item_loader.add_value("url_object_id", get_md5(response.url))
+        item_loader.add_value("md5_id", get_md5(response.url))
         # 发布时间
         create_date = response.meta.get("create_date", "")
         item_loader.add_value("create_date", create_date)
@@ -50,8 +52,10 @@ class EnrolnewsSpider(scrapy.Spider):
         item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
         item_loader.add_value("tag", "通知公告")
+        item_loader.add_value("tag_id", "2")
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["本科招生网"])
+        item_loader.add_value("user_id", ["2"])
         # 内容#vsb_content_2
         item_loader.add_css("content", "#vsb_content")
         # 部门

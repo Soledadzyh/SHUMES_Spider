@@ -6,35 +6,33 @@ from scrapy import Request
 
 from SHUSpider.items import NewsItemLoader, NewsItem
 from SHUSpider.utils.com import get_md5
-
+from pytime import pytime
 
 class ShunewsSpider(scrapy.Spider):
-    name = 'SHUnews'
+    name = 'SHUnews_zyxw'
     allowed_domains = ['news.shu.edu.cn']
-    start_urls = ["http://news.shu.edu.cn/index/mtgz.htm"]
-
-
+    start_urls = ["http://news.shu.edu.cn/index/zyxw.htm"]
+    # start_urls = ["http://news.shu.edu.cn/index/kydt.htm"]
+    # start_urls = ["http://news.shu.edu.cn/index/zhxw.htm"]
+    # start_urls = ["http://news.shu.edu.cn/index/whxx.htm"]
+    # start_urls = ["http://news.shu.edu.cn/index/tpxw.htm"]
+    # start_urls = ["http://news.shu.edu.cn/index/spxw.htm"]
     def parse(self, response):
         # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
-        post_nodes = response.css(
-            ".views-table > tbody:nth-child(1) tr")
+        post_nodes = response.css("#dnn_ctr1053_ArticleList_ctl00_lstArticles > tbody:nth-child(1) a::attr(href)").extract()
+        news_time = response.css("#dnn_ctr1053_ArticleList_ctl00_lstArticles_ctl00_lblPublishDate::text") .extract_first()
+        if pytime.count(pytime.today(), news_time) > datetime.timedelta(200):
+            print(news_time)
+            return
+        meta = response
 
         for post_node in post_nodes:
-            print(datetime.datetime.strptime(response.css("#line_u4_0 > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > \
-                                                          tr:nth-child(1) > td:nth-child(2) > span:nth-child(1)::text").extract_first(""),"%Y-%m-%d")\
-                    > datetime.datetime.strptime('2018-01-01', '%Y-%m-%d'))
-            if(datetime.datetime.strptime(response.css("#line_u4_0 > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > \
-                                                          tr:nth-child(1) > td:nth-child(2) > span:nth-child(1)::text").extract_first(""),"%Y-%m-%d")\
-                    > datetime.datetime.strptime('2018-01-01', '%Y-%m-%d')):
-                yield Request(url=parse.urljoin(response.url, post_node),callback=self.parse_detail)
-            else:
-                break
+            yield Request(url=parse.urljoin(response.url, post_node), callback=self.parse_detail)
 
         # 提取下一页并交给scrapy进行下载
         next_url = response.css("a.Next:nth-child(3)::attr(href)").extract_first("")
         if next_url:
             yield Request(url=parse.urljoin(response.url, next_url), callback=self.parse)
-
 
     def parse_detail(self, response):
         # 提取文章中的图片的url
@@ -57,11 +55,15 @@ class ShunewsSpider(scrapy.Spider):
         # 图片地址
         item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
-        item_loader.add_value("tag", ["媒体关注"])
+        item_loader.add_value("tag", ["重要新闻"])
+        item_loader.add_value("tag_id", ["8"])
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["新闻网"])
+        # 一级标签：一般为来源(网站名）
+        item_loader.add_value("user_id", ["3"])
         # 内容#vsb_content_2
-        item_loader.add_xpath("content", "//div[@id='vsb_content_2'] | /html/body/div[1]/div[3]/div/table/tbody/tr/td/div/div[2]/div/div/div/form")
+        item_loader.add_xpath("content",
+                              "//div[@id='vsb_content_2'] | /html/body/div[1]/div[3]/div/table/tbody/tr/td/div/div[2]/div/div/div/form")
         # 部门
         item_loader.add_css("apartment", "#dnn_ctr1053_ArticleDetails_ctl00_hypDept::text")
         # 发布人
@@ -71,5 +73,3 @@ class ShunewsSpider(scrapy.Spider):
         news_item = item_loader.load_item()
 
         yield news_item
-
-

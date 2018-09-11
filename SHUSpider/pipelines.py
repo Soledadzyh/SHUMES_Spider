@@ -8,6 +8,8 @@ import codecs
 import datetime
 import json
 import os
+
+from pytime import pytime
 from scrapy.exporters import JsonItemExporter
 import pymysql
 from twisted.enterprise import adbapi
@@ -15,8 +17,9 @@ from scrapy.exceptions import DropItem
 
 class ShuspiderPipeline(object):
     def process_item(self, item, spider):
-        # if item['create_date'] > datetime.datetime.strptime('2018-01-01', '%Y-%m-%d'):
-        return item
+        if pytime.count(pytime.today(), item['create_date']) < datetime.timedelta(200):
+            return item
+        # return item
 
 # class MysqlPipeline(object):
 #     #采用同步的机制写入mysql

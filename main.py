@@ -11,8 +11,11 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
     图书馆
     本科招生网
 '''
-# execute(['scrapy','crawl','SHUnews'])
+# execute(['scrapy','crawl','SHUnews_kydt'])
+# execute(['scrapy','crawl','SHUnews_zyxw'])
+# execute(['scrapy','crawl','SHUnews_zhxw'])
+# execute(['scrapy','crawl','SHUnews_whxx'])
 # execute(['scrapy','crawl','szSHU'])
 # execute(["scrapy","crawl","spxw"])
-execute(["scrapy","crawl","librarynews"])
-# execute(["scrapy","crawl","enrolnews"])
+# execute(["scrapy","crawl","librarynews"])
+execute(["scrapy","crawl","enrolnews"])

@@ -10,7 +10,7 @@ from scrapy import Request
 from SHUSpider.items import NewsItemLoader, NewsItem
 from SHUSpider.utils.com import get_md5
 
-
+# 教务处
 class JwcSpider(CrawlSpider):
     name = 'jwc'
     allowed_domains = ['jwc.shu.edu.cn']
