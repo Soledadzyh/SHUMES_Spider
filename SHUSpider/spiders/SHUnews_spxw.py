@@ -9,7 +9,7 @@ from SHUSpider.utils.com import get_md5
 from pytime import pytime
 
 class ShunewsSpider(scrapy.Spider):
-    name = 'SHUnews_kydt'
+    name = 'SHUnews_spxw'
     allowed_domains = ['news.shu.edu.cn']
     # start_urls = ["http://news.shu.edu.cn/index/kydt.htm"]
     # start_urls = ["http://news.shu.edu.cn/index/zhxw.htm"]

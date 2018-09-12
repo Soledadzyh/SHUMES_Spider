@@ -21,7 +21,6 @@ class ShunewsSpider(scrapy.Spider):
         if pytime.count(pytime.today(), news_time) > datetime.timedelta(200):
             print(news_time)
             return
-        meta = response
 
         for post_node in post_nodes:
             yield Request(url=parse.urljoin(response.url, post_node), callback=self.parse_detail)

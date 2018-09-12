@@ -21,9 +21,9 @@ NEWSPIDER_MODULE = 'SHUSpider.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 import sys
-BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-sys.path.insert(0,os.path.join(BASE_DIR,"SHUSpider"))
-
+LOG_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.join(LOG_DIR,"SHUSpider"))
+# print(os.path.join(BASE_DIR,"SHUSpider")
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
 

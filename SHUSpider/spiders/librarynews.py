@@ -57,12 +57,13 @@ class ShunewsSpider(scrapy.Spider):
         # 图片地址
         item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
-        tag = response.css("div.field:nth-child(2) > div:nth-child(1) > div:nth-child(1) > a:nth-child(1)::text")
+        tag = response.css("div.field:nth-child(2) >"
+                           " div:nth-child(1) > div:nth-child(1) > a:nth-child(1)::text").extract_first()
         item_loader.add_value("tag", tag)
         tag_num = {"资源动态": "1",
                    "公告信息": "4",
                    "图书馆新闻": "3"}
-        item_loader.add_value("tag_id", tag_num[tag.extract_first()])
+        item_loader.add_value("tag_id", tag_num[tag])
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["图书馆"])
         item_loader.add_value("user_id",["1"])
