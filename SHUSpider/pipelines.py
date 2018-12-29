@@ -15,11 +15,13 @@ import pymysql
 from twisted.enterprise import adbapi
 from scrapy.exceptions import DropItem
 
+from SHUSpider.settings import TIME_DELTA_DAYS
+
+
 class ShuspiderPipeline(object):
     def process_item(self, item, spider):
-        if pytime.count(pytime.today(), item['create_date']) < datetime.timedelta(200):
+        if pytime.count(pytime.today(), item['create_date']) < datetime.timedelta(TIME_DELTA_DAYS):
             return item
-        # return item
 
 # class MysqlPipeline(object):
 #     #采用同步的机制写入mysql
@@ -43,6 +45,8 @@ class ShuspiderPipeline(object):
     异步导入数据库
     其他格式的pipeline只是拿来练手的
 """
+
+
 class MysqlTwistedPipeline(object):
     def __init__(self, dbpool):
         self.dbpool = dbpool
@@ -54,7 +58,7 @@ class MysqlTwistedPipeline(object):
             password=settings["MYSQL_PASSWORD"],
             cursorclass=pymysql.cursors.DictCursor,
             database=settings["MYSQL_DBNAME"],
-            charset='utf8',
+            charset='utf8mb4',
             user=settings["MYSQL_USER"]
         )
         dbpool = adbapi.ConnectionPool("pymysql", **dbparms)

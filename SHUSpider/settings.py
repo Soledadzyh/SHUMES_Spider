@@ -68,6 +68,7 @@ sys.path.insert(0, os.path.join(LOG_DIR,"SHUSpider"))
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
+    # "SHUSpider.middlewares.JSMiddleWare":30,
     'SHUSpider.pipelines.ShuspiderPipeline': 300,
     "SHUSpider.pipelines.MysqlTwistedPipeline":  500
 }
@@ -92,9 +93,11 @@ ITEM_PIPELINES = {
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-MYSQL_HOST = "47.106.224.202"
-MYSQL_DBNAME = "message"
+MYSQL_HOST = "101.132.105.112"
+MYSQL_DBNAME = "shumessage"
+# MYSQL_DBNAME = "message"
 MYSQL_USER = "root"
-MYSQL_PASSWORD = "root"
+MYSQL_PASSWORD = "miaoxiaojie"
 SQL_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 SQL_DATE_FORMAT = "%Y-%m-%d"
+TIME_DELTA_DAYS = 400

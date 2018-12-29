@@ -58,7 +58,7 @@ class EnrolnewsSpider(scrapy.Spider):
         item_loader.add_value("user_id", ["2"])
         # 内容#vsb_content_2
         item_loader.add_css("content", "#vsb_content")
-        # 部门
+        # 部门 此网站没有发布部门
         # item_loader.add_css("apartment", "")
         # 发布人
         item_loader.add_css("author", "#dnn_ctr63596_ArtDetail_hypFirst::text")

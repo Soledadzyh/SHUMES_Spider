@@ -53,23 +53,24 @@ class NewsItem(scrapy.Item):
     content = scrapy.Field()
     apartment = scrapy.Field()
     tag = scrapy.Field()
-    tag_id = scrapy.Field()
+    # tag_id = scrapy.Field()
     image_url_list = scrapy.Field(
         output_processor=Join("|")
     )
-    user_id = scrapy.Field()
+
+    # user_id = scrapy.Field()
     def get_insert_sql(self):
         insert_sql = """
-            insert into tbl_News_backup(md5_id,title, author, create_date, user_name, url, apartment, tag, content, 
-            image_url_list,user_id, tag_id)
-            VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE create_date=VALUES (create_date),
+            insert into news(md5_id, title, author, create_date, user_name, url, apartment, tag, content, 
+            image_url_list)
+            VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE create_date=VALUES (create_date),
             image_url_list=VALUES(image_url_list),tag=VALUES(tag),apartment=VALUES (apartment),author=VALUES (author)
         """
 
         params = (
             self["md5_id"], self['title'], self.get('author', ''), self['create_date'], self['webname'], self['url'],
             self.get('apartment', ''), self['tag'],
-            self['content'], self.get('image_url_list', ''), self['user_id'], self['tag_id']
+            self['content'], self.get('image_url_list', '')  # , self['user_id'], self['tag_id']
         )
         # params = (
         #     self["md5_id"], self['title'], self['create_date'], self['webname'], self['url'],

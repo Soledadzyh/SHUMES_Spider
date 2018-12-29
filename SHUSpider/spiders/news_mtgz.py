@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-
+# abandoned
 
 class NewsMtgzSpider(scrapy.Spider):
     name = 'news_mtgz'

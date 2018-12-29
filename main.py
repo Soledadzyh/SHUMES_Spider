@@ -17,5 +17,14 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # execute(['scrapy','crawl','SHUnews_whxx'])
 # execute(['scrapy','crawl','szSHU'])
 # execute(["scrapy","crawl","spxw"])
-execute(["scrapy","crawl","librarynews"])
+# execute(["scrapy","crawl","librarynews"])
 # execute(["scrapy","crawl","enrolnews"])
+
+# 教务处 通知公告
+# execute(["scrapy","crawl","jwc_tggg"])
+# 教务处 新闻
+# execute(["scrapy","crawl","jwc_xw"])
+# 学工办
+# execute(["scrapy","crawl","stu_affairs_office_tzgg"])
+# 学工新闻
+execute(["scrapy","crawl","stu_affairs_office_xgxw"])
