@@ -177,4 +177,5 @@ class ElasticSearchPipeline(object):
         item.save_to_es()
         return item
 
+
 project_dir = os.path.abspath(os.path.dirname(__file__))

@@ -18,10 +18,7 @@ class ShunewsSpider(scrapy.Spider):
     name = 'stu_affairs_office_tzgg'
     allowed_domains = ['xgb.shu.edu.cn']
     start_urls = ["http://www.xgb.shu.edu.cn/Default.aspx?tabid=31640"]
-    # start_urls = ["http://news.shu.edu.cn/index/zhxw.htm"]
-    # start_urls = ["http://news.shu.edu.cn/index/whxx.htm"]
-    # start_urls = ["http://news.shu.edu.cn/index/tpxw.htm"]
-    # start_urls = ["http://news.shu.edu.cn/index/spxw.htm"]
+
     def parse(self, response):
         # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
         post_nodes =  response.css("#dnn_ctr59825_ArticleList__ctl0_ArtDataList a::attr(href)").extract()
