@@ -25,10 +25,15 @@ class JwcSpider(scrapy.Spider):
 
     def parse(self, response):
         # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
+<<<<<<<< HEAD:SHUSpider/spiders/jwc_tzgg.py
         post_nodes = response.css(
             "#dnn_ctr43516_ArticleList__ctl0_ArtDataList__ctl1_titleLink1::attr(href)").extract()
         news_time = response.css(
             "dnn_ctr43516_ArticleList__ctl0_ArtDataList__ctl1_Label6::text").extract_first()
+========
+        post_nodes = response.css("#dnn_ctr1053_ArticleList_ctl00_lstArticles > tbody:nth-child(1) a::attr(href)").extract()
+        news_time = response.css("#dnn_ctr1053_ArticleList_ctl00_lstArticles_ctl00_lblPublishDate::text") .extract_first()
+>>>>>>>> origin/master:SHUSpider/spiders/SHUnews_spxw.py
         if pytime.count(pytime.today(), news_time) > datetime.timedelta(TIME_DELTA_DAYS):
             print(news_time)
             return
@@ -62,14 +67,26 @@ class JwcSpider(scrapy.Spider):
         # 图片地址
         item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
+<<<<<<<< HEAD:SHUSpider/spiders/jwc_tzgg.py
         item_loader.add_value("tag", ["通知公告"])
         # item_loader.add_value("tag_id", ["6"])
+========
+        item_loader.add_value("tag", ["视频新闻"])
+        # item_loader.add_value("tag_id", ["9"])
+>>>>>>>> origin/master:SHUSpider/spiders/SHUnews_spxw.py
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["教务处"])
         # 一级标签：一般为来源(网站名）
+<<<<<<<< HEAD:SHUSpider/spiders/jwc_tzgg.py
         item_loader.add_value("user_id", ["3"])
         # 内容#vsb_content
         item_loader.add_css("content", "#vsb_content")
+========
+        # item_loader.add_value("user_id", ["3"])
+        # 内容#vsb_content_2
+        item_loader.add_xpath("content",
+                              "//div[@id='vsb_content_2'] | /html/body/div[1]/div[3]/div/table/tbody/tr/td/div/div[2]/div/div/div/form")
+>>>>>>>> origin/master:SHUSpider/spiders/SHUnews_spxw.py
         # 部门
         item_loader.add_css("apartment", "#dnn_ctr1053_ArticleDetails_ctl00_hypDept::text")
         # 发布人

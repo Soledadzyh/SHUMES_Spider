@@ -6,6 +6,7 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.http import HtmlResponse
 
 
 class ShuspiderSpiderMiddleware(object):
@@ -101,3 +102,19 @@ class ShuspiderDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+#
+# from selenium import webdriver
+#
+# class JSMiddleWare(object):
+#     # 处理动态JS页面
+#     def __init__(self):
+#         self.browser = webdriver.Firefox()
+#         super(JSMiddleWare, self).__init__()
+#
+#     def process_request(self, request, spider):
+#         if spider.name == "stu_affairs_office_tzgg":
+#             self.browser.get(request.url)
+#             import time
+#             time.sleep(3)
+#             print("访问{0}".format(request.url))
+#             return HtmlResponse(url=self.browser.current_url, body=self.browser.page_source, encoding="utf-8")
