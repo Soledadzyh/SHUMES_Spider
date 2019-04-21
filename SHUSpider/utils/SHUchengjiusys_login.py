@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-from datetime import date, datetime
-from urllib import parse
 
 import requests
 
 import http.cookiejar as cookielib
 
-import re
-
-from SHUSpider.settings import SQL_DATETIME_FORMAT, SQL_DATE_FORMAT
 
 agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0"
 header = {

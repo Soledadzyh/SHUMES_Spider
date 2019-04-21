@@ -11,15 +11,20 @@ import os
 
 from pytime import pytime
 from scrapy.exporters import JsonItemExporter
-import pymysql
+import pymysql, psycopg2
 from twisted.enterprise import adbapi
 from scrapy.exceptions import DropItem
+from SHUSpider.settings import TIME_DELTA_DAYS
+
+from SHUSpider.models.es_types import NewsType
+from w3lib.html import remove_tags
+
 
 class ShuspiderPipeline(object):
     def process_item(self, item, spider):
-        if pytime.count(pytime.today(), item['create_date']) < datetime.timedelta(200):
+        if pytime.count(pytime.today(), item['create_date']) < datetime.timedelta(TIME_DELTA_DAYS):
             return item
-        # return item
+
 
 # class MysqlPipeline(object):
 #     #采用同步的机制写入mysql
@@ -43,6 +48,53 @@ class ShuspiderPipeline(object):
     异步导入数据库
     其他格式的pipeline只是拿来练手的
 """
+
+"""
+POSTGRES
+"""
+#
+# class PostgresTwistedPipeline(object):
+#     def __init__(self, dbpool):
+#         self.dbpool = dbpool
+#
+#     @classmethod
+#     def from_settings(cls, settings):
+#         dbparms = dict(
+#             host=settings['POSTGRES_HOST'],
+#             password=settings["POSTGRES_PASSWORD"],
+#             cursorclass=pymysql.cursors.DictCursor,
+#             database=settings["POSTGRES_DBNAME"],
+#             user=settings["POSTGRES_USER"]
+#         )
+#         dbpool = adbapi.ConnectionPool("psycopg2", **dbparms)
+#         return cls(dbpool)
+#
+#     def process_item(self, item, spider):
+#         # 使用twisted将mysql插入变成异步执行
+#         query = self.dbpool.runInteraction(self.do_insert, item)
+#         query.addErrback(self.handle_error, item, spider)  # 处理异常
+#
+#     def handle_error(self, failure, item, spider):
+#         print(failure)
+#
+#     def do_insert(self, cursor, item):
+#         # 执行具体的插入
+#         insert_sql_news, insert_sql_labels, insert_sql_tags,  params_news, params_labels = item.get_postgre_sql()
+#         try:
+#             cursor.execute(insert_sql_news, params_news)
+#
+#         news_id = int(cursor.lastrowid)
+#         cursor.execute(insert_sql_tags, params_labels)
+#         news_id = int(cursor.lastrowid)
+#         params_labels.append(news_id)
+#         cursor.execute(insert_sql_labels, params_labels)
+#         psycopg2.connect()
+
+"""
+MYSQL
+"""
+
+
 class MysqlTwistedPipeline(object):
     def __init__(self, dbpool):
         self.dbpool = dbpool
@@ -54,7 +106,7 @@ class MysqlTwistedPipeline(object):
             password=settings["MYSQL_PASSWORD"],
             cursorclass=pymysql.cursors.DictCursor,
             database=settings["MYSQL_DBNAME"],
-            charset='utf8',
+            charset='utf8mb4',
             user=settings["MYSQL_USER"]
         )
         dbpool = adbapi.ConnectionPool("pymysql", **dbparms)
@@ -63,6 +115,7 @@ class MysqlTwistedPipeline(object):
     def process_item(self, item, spider):
         # 使用twisted将mysql插入变成异步执行
         query = self.dbpool.runInteraction(self.do_insert, item)
+        query.addCallback(self.add_label_news, item, spider)
         query.addErrback(self.handle_error, item, spider)  # 处理异常
 
     def handle_error(self, failure, item, spider):
@@ -72,6 +125,19 @@ class MysqlTwistedPipeline(object):
         # 执行具体的插入
         insert_sql, params = item.get_insert_sql()
         cursor.execute(insert_sql, params)
+
+    def do_insert(self, cursor, item):
+        # 执行具体的插入
+        insert_sql_news, params_news, insert_sql_labels, params_labels = item.get_insert_sql()
+        cursor.execute(insert_sql_news, params_news)
+        # try:
+        #     cursor.execute(insert_sql_labels, params_labels)
+        #     label_id = cursor.fetchall()[0][0]
+        #     params_labels.append(label_id)
+        # except:
+        #     pass
+        # except Exception as e:
+        #     pass
 
 
 # 自定义的json导出
@@ -103,5 +169,12 @@ class JsonExporterPipeline(object):
         self.exporter.export_item(item)
         return item
 
+
+class ElasticSearchPipeline(object):
+    # 将数据导入es中
+    def process_item(self, item, spider):
+        # 将items中的数据放入es
+        item.save_to_es()
+        return item
 
 project_dir = os.path.abspath(os.path.dirname(__file__))

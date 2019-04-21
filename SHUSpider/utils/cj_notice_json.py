@@ -33,7 +33,7 @@ for news in text["data"]["tongzgg"]:
     content = news["NeiRong"]
     with con.cursor() as cursor:
         sql = """
-            insert into news(title,create_date, webname, url, content)
+            insert into news(title,create_date, user_name, url, content)
             VALUES (%s, %s, %s, %s, %s) 
         """
         cursor.execute(sql, (title,create_date, webname, url, content))

@@ -21,8 +21,9 @@ NEWSPIDER_MODULE = 'SHUSpider.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 import sys
+
 LOG_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-sys.path.insert(0, os.path.join(LOG_DIR,"SHUSpider"))
+sys.path.insert(0, os.path.join(LOG_DIR, "SHUSpider"))
 # print(os.path.join(BASE_DIR,"SHUSpider")
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
@@ -69,7 +70,9 @@ sys.path.insert(0, os.path.join(LOG_DIR,"SHUSpider"))
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'SHUSpider.pipelines.ShuspiderPipeline': 300,
-    "SHUSpider.pipelines.MysqlTwistedPipeline":  500
+    "SHUSpider.pipelines.ElasticSearchPipeline": 500
+    # "SHUSpider.pipelines.MysqlTwistedPipeline":  500
+    # "SHUSpider.pipelines.PostgresTwistedPipeline": 500,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -92,9 +95,28 @@ ITEM_PIPELINES = {
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-MYSQL_HOST = "47.106.224.202"
+
+
+# MYSQL_HOST = "101.132.105.112"
+# MYSQL_DBNAME = "shumessage"
+# MYSQL_USER = "root"
+# MYSQL_PASSWORD = "miaoxiaojie"
+
+
+MYSQL_HOST = "api.mzz.pub"
 MYSQL_DBNAME = "message"
 MYSQL_USER = "root"
-MYSQL_PASSWORD = "root"
+MYSQL_PASSWORD = "Miaoxiaojie123"
+"""
+    POSTGRES
+"""
+POSTGRES_HOST = "129.204.71.113"
+POSTGRES_DBNAME = "message"
+POSTGRES_USER = "postgres"
+POSTGRES_PASSWORD = "0ggmr0"
+
 SQL_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 SQL_DATE_FORMAT = "%Y-%m-%d"
+TIME_DELTA_DAYS = 400
+
+TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhOTVjODljYy1iNjNhLTQzYWEtODk3OC0zYjI4NmQ4NTI5MGIiLCJuaWNrbmFtZSI6IiVFNyU4QyVBQSVFOCVCOSU4NDEiLCJleHAiOjQ3MDkyMzg2MTgsImlhdCI6MTU1NTYzODYxOH0.N21AUkbB9nndkVVrsjYrTe96oDiE8dDUF15SHJyouY4"

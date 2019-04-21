@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="message@47.106.224.202" uuid="17e6230a-9952-45ea-913c-2c4fb7cc0380">
+    <data-source source="LOCAL" name="shumessage@101.132.105.112" uuid="8119110f-b16a-4821-ad31-129c1c790532">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://47.106.224.202:3306/message</jdbc-url>
+      <jdbc-url>jdbc:mysql://101.132.105.112:3306/shumessage</jdbc-url>
+      <driver-properties>
+        <property name="autoReconnect" value="true" />
+        <property name="zeroDateTimeBehavior" value="convertToNull" />
+        <property name="tinyInt1isBit" value="false" />
+        <property name="characterEncoding" value="utf8" />
+        <property name="characterSetResults" value="utf8" />
+        <property name="yearIsDateType" value="false" />
+      </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="message@129.204.71.113" uuid="9e4b1595-da2c-4097-ad35-eb28080bcdc9">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://129.204.71.113:5432/message</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="shumes@localhost" uuid="e51eee98-d1d9-4a04-9798-33a1855998ee">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/shumes</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="shumes_old" uuid="808c9197-c73e-478b-89ed-74b90b9586f8">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://api.mzz.pub:3306/message</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />

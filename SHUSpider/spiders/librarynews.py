@@ -2,16 +2,19 @@
 import datetime
 from urllib import parse
 import scrapy
+from pytime import pytime
 from scrapy import Request
 
 from SHUSpider.items import NewsItemLoader, NewsItem
+from SHUSpider.settings import TIME_DELTA_DAYS
 from SHUSpider.utils.com import get_md5
-
+import pymysql,psycopg2
 
 class ShunewsSpider(scrapy.Spider):
     name = 'librarynews'
     allowed_domains = ['lib.shu.edu.cn']
-    start_urls = ['http://www.lib.shu.edu.cn/newsfb',
+    start_urls = [
+        'http://www.lib.shu.edu.cn/newsfb',
                   "http://www.lib.shu.edu.cn/resourcesfb",
                   "http://www.lib.shu.edu.cn/jzxxfb"
                   ]
@@ -19,19 +22,16 @@ class ShunewsSpider(scrapy.Spider):
     def parse(self, response):
         # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
         post_nodes = response.css(".views-table > tbody:nth-child(1) tr")
-        # time response.css(".views-table > tbody:nth-child(1) tr")[0].css(".views-field-created::text").extract()
-        # url
         for post_node in post_nodes:
-            create_date = post_node.css(".views-field-created::text").extract_first().strip().replace("17-",
-                                                                                                      "2017-").replace(
-                "18-", "2018-")
-            create_date = datetime.datetime.strptime(create_date, "%Y-%m-%d")
-            # response.css(".views-table > tbody:nth-child(1) tr")[0].css("a::attr(href)")
+            create_date = post_node.css(".views-field-created::text").extract_first().strip()
+            create_date = datetime.datetime.strptime(create_date, "%y-%m-%d")
             post_node_url = post_node.css("a::attr(href)").extract_first()
-            print(create_date > datetime.datetime.strptime('2018-01-01', '%Y-%m-%d'))
-            if create_date > datetime.datetime.strptime('2018-01-01', '%Y-%m-%d'):
+
+            if pytime.count(pytime.today(), create_date) < datetime.timedelta(TIME_DELTA_DAYS):
+                url = parse.urljoin(response.url, post_node_url)
+                delta = pytime.count(pytime.today(), create_date)
                 yield Request(url=parse.urljoin(response.url, post_node_url), meta={"create_date": create_date},
-                              callback=self.parse_detail)
+                              callback=self.parse_detail, dont_filter=True)
             else:
                 break
 
@@ -47,6 +47,9 @@ class ShunewsSpider(scrapy.Spider):
         item_loader.add_css("title", "#page-title::text")
         # 文章地址
         item_loader.add_value("url", response.url)
+        #type
+        type=1
+        item_loader.add_value("type", [type])
         # key：md5_id
         md5_id = get_md5(response.url)
         item_loader.add_value("md5_id", [md5_id])

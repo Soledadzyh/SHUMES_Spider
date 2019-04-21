@@ -5,6 +5,7 @@ import scrapy
 from scrapy import Request
 
 from SHUSpider.items import NewsItemLoader, NewsItem
+from SHUSpider.settings import TIME_DELTA_DAYS
 from SHUSpider.utils.com import get_md5
 from pytime import pytime
 
@@ -18,7 +19,7 @@ class ShunewsSpider(scrapy.Spider):
         # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
         post_nodes = response.css("#dnn_ctr1053_ArticleList_ctl00_lstArticles > tbody:nth-child(1) a::attr(href)").extract()
         news_time = response.css("#dnn_ctr1053_ArticleList_ctl00_lstArticles_ctl00_lblPublishDate::text") .extract_first()
-        if pytime.count(pytime.today(), news_time) > datetime.timedelta(200):
+        if pytime.count(pytime.today(), news_time) > datetime.timedelta(TIME_DELTA_DAYS):
             print(news_time)
             return
 
@@ -52,11 +53,11 @@ class ShunewsSpider(scrapy.Spider):
         item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
         item_loader.add_value("tag", ["文化信息"])
-        item_loader.add_value("tag_id", ["7"])
+        # item_loader.add_value("tag_id", ["7"])
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["新闻网"])
         # 一级标签：一般为来源(网站名）
-        item_loader.add_value("user_id", ["3"])
+        # item_loader.add_value("user_id", ["3"])
         # 内容#vsb_content_2
         item_loader.add_xpath("content",
                               "//div[@id='vsb_content_2'] | /html/body/div[1]/div[3]/div/table/tbody/tr/td/div/div[2]/div/div/div/form")
