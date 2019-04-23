@@ -8,32 +8,33 @@ from scrapy import Request
 from SHUSpider.items import NewsItemLoader, NewsItem
 from SHUSpider.settings import TIME_DELTA_DAYS
 from SHUSpider.utils.com import get_md5
-import pymysql,psycopg2
+import pymysql, psycopg2
+
 
 class ShunewsSpider(scrapy.Spider):
     name = 'librarynews'
     allowed_domains = ['lib.shu.edu.cn']
     start_urls = [
         'http://www.lib.shu.edu.cn/newsfb',
-                  "http://www.lib.shu.edu.cn/resourcesfb",
-                  "http://www.lib.shu.edu.cn/jzxxfb"
-                  ]
+        "http://www.lib.shu.edu.cn/resourcesfb",
+        "http://www.lib.shu.edu.cn/jzxxfb"
+    ]
 
     def parse(self, response):
         # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
         post_nodes = response.css(".views-table > tbody:nth-child(1) tr")
         for post_node in post_nodes:
             create_date = post_node.css(".views-field-created::text").extract_first().strip()
-            create_date = datetime.datetime.strptime(create_date, "%y-%m-%d")
             post_node_url = post_node.css("a::attr(href)").extract_first()
+            yield Request(url=parse.urljoin(response.url, post_node_url), meta={"create_date": create_date},
+                          callback=self.parse_detail, dont_filter=True)
+            if pytime.count(pytime.today(), create_date) > datetime.timedelta(TIME_DELTA_DAYS):
+                return
 
-            if pytime.count(pytime.today(), create_date) < datetime.timedelta(TIME_DELTA_DAYS):
-                url = parse.urljoin(response.url, post_node_url)
-                delta = pytime.count(pytime.today(), create_date)
-                yield Request(url=parse.urljoin(response.url, post_node_url), meta={"create_date": create_date},
-                              callback=self.parse_detail, dont_filter=True)
-            else:
-                break
+        next_url = response.css(".pager-next a::attr(href)").extract_first("")
+
+        if next_url:
+            yield Request(url=parse.urljoin(response.url, next_url), callback=self.parse)
 
     def parse_detail(self, response):
         # 提取文章中的图片的url

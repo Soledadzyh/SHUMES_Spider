@@ -70,8 +70,8 @@ sys.path.insert(0, os.path.join(LOG_DIR, "SHUSpider"))
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'SHUSpider.pipelines.ShuspiderPipeline': 300,
-    "SHUSpider.pipelines.POSTJsonPipeline":500
-    # "SHUSpider.pipelines.ElasticSearchPipeline": 500
+    "SHUSpider.pipelines.POSTJsonPipeline":500,
+    "SHUSpider.pipelines.ElasticSearchPipeline": 501
     # "SHUSpider.pipelines.MysqlTwistedPipeline":  500
     # "SHUSpider.pipelines.PostgresTwistedPipeline": 500,
 }

@@ -72,8 +72,8 @@ class ShunewsSpider(scrapy.Spider):
         item_loader.add_value("webname", ["新闻网"])
         # 一级标签：一般为来源(网站名）
         # 内容#vsb_content_2   //*[@id="dnn_ctr43465_ModuleContent"]
-        item_loader.add_xpath("content",
-                              "//div[@id='vsb_content_2'] | /html/body/div[1]/div[3]/div/table/tbody/tr/td/div/div[2]/div/div/div/form")
+        item_loader.add_css("content","[id*='vsb_content']")
+        # #vsb_content_503
         # 部门
         item_loader.add_xpath("apartment",
                               "//*[@id='dnn_ctr1053_ArticleDetails_ctl00_hypDept']/text()| //*["
