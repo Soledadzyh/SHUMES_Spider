@@ -8,16 +8,17 @@ import codecs
 import datetime
 import json
 import os
-
+import grequests, requests
+import scrapy
 from pytime import pytime
 from scrapy.exporters import JsonItemExporter
 import pymysql, psycopg2
+from scrapy.http import HtmlResponse
 from twisted.enterprise import adbapi
 from scrapy.exceptions import DropItem
-from SHUSpider.settings import TIME_DELTA_DAYS
-
-from SHUSpider.models.es_types import NewsType
 from w3lib.html import remove_tags
+
+from SHUSpider.settings import TIME_DELTA_DAYS, URL, HEADERS
 
 
 class ShuspiderPipeline(object):
@@ -140,13 +141,50 @@ class MysqlTwistedPipeline(object):
         #     pass
 
 
+# userId	发布新闻的官方账号的uuid String
+# mediaTitle	爬取的新闻的标题 String
+# newsUrl	爬取的新闻的url String
+# newsLabelId	新闻标签的uuid（周总爬虫爬下来的时候是自带标签的） String
+# contentFromScrapy	爬取的新闻的内容，供做分析的同学拿去使用 String
+# md5	周总说这个是用来确认爬取的新闻是唯一的，详细情况请咨询周总 String
+# createTime	爬取的新闻发布的时间，格式为 1998-02-04 12:12:12
+#
+# title author webname  url  md5_id  create_date content apartment  tag
+# POST JSON to postgresql
+class POSTJsonPipeline(object):
+    def __init__(self):
+        self.ids = json.load(open("SHUSpider/tools/tag_web_ids.json"))
+
+    def process_item(self, item, spider):
+        d_item = dict(item)
+        new_item = {}
+        new_item["md5"] = d_item["md5_id"]
+        new_item["userId"] = self.ids[(d_item["webname"])]
+        new_item["mediaTitle"] = d_item["title"]
+        new_item["newsUrl"] = d_item["url"]
+        new_item["newsLabelId"] = self.ids[d_item["tag"]]
+        new_item["contentFromScrapy"] = remove_tags(d_item["content"])
+        new_item["createTime"] = str(d_item["create_date"])
+        lines = json.dumps(new_item, ensure_ascii=False) + '\n'
+        resp = requests.request(method="POST", url=URL + "/news", headers=HEADERS, data =lines.encode("utf-8"))
+
+        print(resp.text)
+        # print(grequests.map(resp).text())
+        return item
+
+
 # 自定义的json导出
 class JsonWithEncodingPipeline(object):
     def __init__(self):
         self.file = codecs.open("news.json", "w", encoding="utf-8")
 
     def process_item(self, item, spider):
-        lines = json.dumps(dict(item), ensure_ascii=False) + '\n'
+        d_item = dict(item)
+        d_item["md5"] = d_item["md5_id"]
+
+        post_js = dict(item).pop(["author", "apartment", "md5_id"])
+        lines = json.dumps(post_js, ensure_ascii=False) + '\n'
+
         self.file.write(lines)
         return item
 

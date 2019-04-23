@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+
 """
 教务处_通知公告
 """
+
 
 import scrapy
 from pytime import pytime
@@ -17,16 +19,22 @@ from SHUSpider.settings import TIME_DELTA_DAYS
 from SHUSpider.utils.com import get_md5
 
 class JwcSpider(scrapy.Spider):
-    name = 'jwc_xw'
+    name = 'jwc'
+    tag = ""
     allowed_domains = ['jwc.shu.edu.cn']
-    start_urls = ['http://www.jwc.shu.edu.cn/index/xw.htm']
+    start_urls = ['http://www.jwc.shu.edu.cn/index/tzgg.htm','http://www.jwc.shu.edu.cn/index/xw.htm']
 
     def parse(self, response):
         # 解析列表页中的所有文章url并交给scrapy下载后并进行解析
+        if response.url=="http://www.jwc.shu.edu.cn/index/tzgg.htm":
+            self.tag = "通知公告"
+        elif response.url=="http://www.jwc.shu.edu.cn/index/xw.htm":
+            self.tag = "新闻"
         post_nodes = response.css(
             "#dnn_ctr43516_ArticleList__ctl0_ArtDataList__ctl1_titleLink1::attr(href)").extract()
         news_time = response.css(
             "dnn_ctr43516_ArticleList__ctl0_ArtDataList__ctl1_Label6::text").extract_first()
+
         if pytime.count(pytime.today(), news_time) > datetime.timedelta(TIME_DELTA_DAYS):
             print(news_time)
             return
@@ -37,7 +45,7 @@ class JwcSpider(scrapy.Spider):
         # 提取下一页并交给scrapy进行下载
         next_url = response.css("a.Next:nth-child(3)::attr(href)").extract_first("")
         if next_url:
-            yield Request(url=parse.urljoin(response.url, next_url), callback=self.parse)
+            yield Request(url=parse.urljoin(response.url, next_url),meta ={"tag":self.tag}, callback=self.parse)
 
     def parse_detail(self, response):
         # 提取文章中的图片的url
@@ -60,19 +68,21 @@ class JwcSpider(scrapy.Spider):
         # 图片地址
         item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
-        item_loader.add_value("tag", ["新闻"])
+        item_loader.add_value("tag", response.meta.get("tag",""))
         # item_loader.add_value("tag_id", ["6"])
+        # item_loader.add_value("tag_id", ["9"])
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["教务处"])
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("user_id", ["3"])
         # 内容#vsb_content
-        item_loader.add_css("content", "#vsb_content")
+
+        item_loader.add_xpath("content",
+                              "//div[@id='vsb_content'] | //*[@id='dnn_ctr43465_ModuleContent']")
         # 部门
         item_loader.add_css("apartment", "#dnn_ctr1053_ArticleDetails_ctl00_hypDept::text")
         # 发布人
         item_loader.add_css("author", "#dnn_ctr43465_ArtDetail_hypFirst::text")
-        # item_loader.add_css("image_url_list","p.vsbcontent_img img::attr(src)")
 
         news_item = item_loader.load_item()
 

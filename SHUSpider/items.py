@@ -56,12 +56,6 @@ class NewsItem(scrapy.Item):
     content = scrapy.Field()
     apartment = scrapy.Field()
     tag = scrapy.Field()
-    tag_id = scrapy.Field()
-    image_url_list = scrapy.Field(
-        output_processor=Join("|")
-    )
-    type = scrapy.Field()
-    user_id = scrapy.Field()
 
     def get_postgre_sql(self):
         insert_sql_news = """

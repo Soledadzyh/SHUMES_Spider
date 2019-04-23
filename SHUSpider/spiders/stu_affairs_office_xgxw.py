@@ -78,14 +78,11 @@ class ShunewsSpider(scrapy.Spider):
         # 发布时间
         item_loader.add_css("create_date", "#dnn_ctr59828_ArtDetail_lblDatePosted::text")
         # 图片地址
-        item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
         item_loader.add_value("tag", ["通知公告"])
-        # item_loader.add_value("tag_id", ["6"])
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["学生工作办公室"])
         # 一级标签：一般为来源(网站名）
-        # item_loader.add_value("user_id", ["3"])
         # 内容#vsb_content_2
         item_loader.add_css("content",
                             "#dnn_ctr59828_ArtDetail_lblArticle")

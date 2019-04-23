@@ -5,7 +5,9 @@ from elasticsearch_dsl import Document, Date, Nested, Boolean, \
     analyzer, InnerDoc, Completion, Keyword, Text
 
 from elasticsearch_dsl.connections import connections
-connections.create_connection(hosts=["localhost:9200"])
+
+connections.create_connection(hosts=["http://112.74.175.228:9200"])
+
 
 class NewsType(Document):
     title = Text(analyzer="ik_max_word")
@@ -17,10 +19,6 @@ class NewsType(Document):
     apartment = Text(analyzer="ik_max_word")
     tag = Text(analyzer="ik_max_word")
     labels = Text(analyzer="ik_max_word")
-    # tag_id =
-    # image_url_list = Text()
-    # type = Text()
-    # user_id = Text()
 
     class Index:
         name = "news"
@@ -28,6 +26,6 @@ class NewsType(Document):
             "number_of_shards": 5,
         }
 
-if __name__=="__main__":
-    NewsType.init()
 
+if __name__ == "__main__":
+    NewsType.init()

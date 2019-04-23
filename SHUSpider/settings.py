@@ -70,7 +70,8 @@ sys.path.insert(0, os.path.join(LOG_DIR, "SHUSpider"))
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'SHUSpider.pipelines.ShuspiderPipeline': 300,
-    "SHUSpider.pipelines.ElasticSearchPipeline": 500
+    "SHUSpider.pipelines.POSTJsonPipeline":500
+    # "SHUSpider.pipelines.ElasticSearchPipeline": 500
     # "SHUSpider.pipelines.MysqlTwistedPipeline":  500
     # "SHUSpider.pipelines.PostgresTwistedPipeline": 500,
 }
@@ -119,4 +120,11 @@ SQL_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 SQL_DATE_FORMAT = "%Y-%m-%d"
 TIME_DELTA_DAYS = 400
 
-TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhOTVjODljYy1iNjNhLTQzYWEtODk3OC0zYjI4NmQ4NTI5MGIiLCJuaWNrbmFtZSI6IiVFNCVCQiU5OSVFNSVBNSVCMzEiLCJleHAiOjQ3MDk0NjA3MzUsImlhdCI6MTU1NTg2MDczNX0.zmfyJpPyVKSLbbHI4pBa0239I2PCF2gj0gw4yO8OT7U"
+
+HEADERS = {
+    'Content-Type': "application/json",
+    'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhOTVjODljYy1iNjNhLTQzYWEtODk3OC0zYjI4NmQ4NTI5MGIiLCJuaWNrbmFtZSI6IiVFNCVCQiU5OSVFNSVBNSVCMzEiLCJleHAiOjQ3MDk0NjA3MzUsImlhdCI6MTU1NTg2MDczNX0.zmfyJpPyVKSLbbHI4pBa0239I2PCF2gj0gw4yO8OT7U"
+}
+
+PIC = "http://www.askququ.com/uploads/allimg/161103/1_161103000823_1.jpg"
+URL = "http://129.204.71.113:9999/api/v2/spider"

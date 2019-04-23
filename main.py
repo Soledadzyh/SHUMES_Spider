@@ -11,18 +11,20 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
     图书馆
     本科招生网
 '''
-# execute(['scrapy','crawl','SHUnews_kydt'])
-# execute(['scrapy','crawl','SHUnews_zyxw'])
-# execute(['scrapy','crawl','SHUnews_zhxw'])
-# execute(['scrapy','crawl','SHUnews_whxx'])
+# 新闻网
+# execute(['scrapy','crawl','SHUnews'])
+# 熟知网
 # execute(['scrapy','crawl','szSHU'])
-# execute(["scrapy","crawl","spxw"])
+
 execute(["scrapy","crawl","librarynews"])
+
+# 本科招生网
 # execute(["scrapy","crawl","enrolnews"])
 
-# 教务处 通知公告
-# execute(["scrapy","crawl","jwc_tggg"])
-# 教务处 新闻
-# execute(["scrapy","crawl","jwc_xw"])
+# 教务处 通知公告 新闻
+
+# execute(["scrapy","crawl","jwc"])
+
 # 学工办
-# execute(["scrapy","crawl","stu_affairs_office_tzgg"])
+# execute(["scrapy","crawl","stu_affairs_office"])
+# execute(["scrapy","crawl","stu_affairs_office_xgxw"])

@@ -41,7 +41,7 @@ class EnrolnewsSpider(scrapy.Spider):
         image_url = response.css(".img_vsb_content::attr(src)").extract()
         image_url_list = [parse.urljoin(response.url, url) for url in image_url]
         # 提取文章具体字段
-        # title author webname url create_date content image_url_list tag apartment
+        # title author webname url create_date content tag apartment
         news_item = NewsItem()
         item_loader = NewsItemLoader(item=NewsItem(), response=response)
         # 文章标题
@@ -52,23 +52,14 @@ class EnrolnewsSpider(scrapy.Spider):
         # 发布时间
         create_date = response.meta.get("create_date", "")
         item_loader.add_value("create_date", create_date)
-        # 图片地址
-        item_loader.add_value("image_url_list", image_url_list)
-        item_loader.add_value("type", "1")
         # 类型标签
         item_loader.add_value("tag", "通知公告")
-        item_loader.add_value("tag_id", "2")
         # 一级标签：一般为来源(网站名）
         item_loader.add_value("webname", ["本科招生网"])
-        item_loader.add_value("user_id", ["2"])
         # 内容#vsb_content_2
         item_loader.add_css("content", "#vsb_content")
-        # 部门 此网站没有发布部门
-        # item_loader.add_css("apartment", "")
         # 发布人
         item_loader.add_css("author", "#dnn_ctr63596_ArtDetail_hypFirst::text")
-        # item_loader.add_css("image_url_list","p.vsbcontent_img img::attr(src)")
-
         news_item = item_loader.load_item()
 
         yield news_item
