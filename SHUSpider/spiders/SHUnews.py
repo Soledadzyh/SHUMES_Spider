@@ -65,8 +65,6 @@ class ShunewsSpider(scrapy.Spider):
         item_loader.add_xpath("create_date",
                               "//*[@id='dnn_ctr1053_ArticleDetails_ctl00_lblDatePosted']/text()| //*["
                               "@id='dnn_ctr1055_ArticleDetails_ctl00_lblDatePosted']/text()")
-        # 图片地址
-        item_loader.add_value("image_url_list", image_url_list)
         # 类型标签
 
         item_loader.add_value("tag", response.meta.get("tag",""))
