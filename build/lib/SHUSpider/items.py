@@ -3,6 +3,8 @@
 import datetime
 
 import scrapy
+from aniso8601 import parse_date
+from pytime.filter import BaseParser
 from pytime import pytime
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import MapCompose, TakeFirst, Join
@@ -33,7 +35,7 @@ def date_convert(value):
 
 
 def strip_blank(value):
-    return value.strip()
+    return remove_tags(value).strip()
 
 
 class NewsItemLoader(ItemLoader):
@@ -53,7 +55,9 @@ class NewsItem(scrapy.Item):
     create_date = scrapy.Field(
         input_processor=MapCompose(date_convert)
     )
-    content = scrapy.Field()
+    content = scrapy.Field(
+        input_processor=MapCompose(strip_blank)
+    )
     apartment = scrapy.Field()
     tag = scrapy.Field()
 
@@ -136,7 +140,7 @@ class NewsItem(scrapy.Item):
         # """
 
         params_news = (
-            self["md5_id"], self['title'],self.get("author", ""), self['create_date'],
+            self["md5_id"], self['title'], self.get("author", ""), self['create_date'],
             self['user_id'], self['webname'],
             self['url'], self.get('apartment', ''), self["tag_id"], self["tag"], self['content'],
             self.get('image_url_list', ''), self["type"]
@@ -156,7 +160,7 @@ class NewsItem(scrapy.Item):
         news = NewsType()
         news.title = self["title"]
         news.create_date = self["create_date"]
-        news.content = remove_tags(self["content"])
+        news.content = self["content"]
         news.tag = self["tag"]
         news.meta.id = self["md5_id"]
         news.webname = self["webname"]

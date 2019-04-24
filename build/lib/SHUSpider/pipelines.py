@@ -163,8 +163,8 @@ class POSTJsonPipeline(object):
         new_item["mediaTitle"] = d_item["title"]
         new_item["newsUrl"] = d_item["url"]
         new_item["newsLabelId"] = self.ids[d_item["tag"]]
-        new_item["contentFromScrapy"] = remove_tags(d_item["content"])
-        new_item["createTime"] = str(d_item["create_date"])
+        new_item["contentFromScrapy"] = d_item["content"]
+        new_item["createTime"] = str(d_item["create_date"])+" 00:00:00"
         lines = json.dumps(new_item, ensure_ascii=False) + '\n'
         resp = requests.request(method="POST", url=URL + "/news", headers=HEADERS, data =lines.encode("utf-8"))
 
